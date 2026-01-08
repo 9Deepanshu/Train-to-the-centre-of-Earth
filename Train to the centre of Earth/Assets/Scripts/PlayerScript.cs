@@ -2,7 +2,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerScript : MonoBehaviour
-{   
+{
+    public GameObject gun;
     private Rigidbody2D m_rigidbody;
 
     // These variables are to hold the Action references
@@ -24,5 +25,20 @@ public class PlayerScript : MonoBehaviour
 
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
         m_rigidbody.MovePosition(m_rigidbody.position + moveValue * Time.deltaTime * 10f);
+
+        var mouse = Mouse.current;
+        Vector2 gunPointDirection = Camera.main.ScreenToWorldPoint(mouse.position.ReadValue()) - transform.position;
+
+        // Calculate angle
+        float angle = Mathf.Atan2(gunPointDirection.y, gunPointDirection.x) * Mathf.Rad2Deg;
+
+        // Rotate gun
+        gun.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+        // Move gun slightly forward in aiming direction
+        Vector2 offsetDirection = gunPointDirection.normalized;
+        float offsetDistance = 0.5f; // tweak this value
+
+        gun.transform.position = (Vector2)transform.position + offsetDirection * offsetDistance;
     }
 }
