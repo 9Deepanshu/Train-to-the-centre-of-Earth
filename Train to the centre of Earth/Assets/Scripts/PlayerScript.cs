@@ -5,6 +5,8 @@ public class PlayerScript : MonoBehaviour
 {
     public GameObject gun;
     private Rigidbody2D m_rigidbody;
+    public float moveSpeed = 20f;
+    public float gunOffset = 1f;
 
     // These variables are to hold the Action references
     InputAction moveAction;
@@ -24,7 +26,7 @@ public class PlayerScript : MonoBehaviour
         // Read the "Move" action value, which is a 2D vector
 
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
-        m_rigidbody.MovePosition(m_rigidbody.position + moveValue * Time.deltaTime * 10f);
+        m_rigidbody.MovePosition(m_rigidbody.position + moveValue * Time.deltaTime * moveSpeed);
 
         var mouse = Mouse.current;
         Vector2 gunPointDirection = Camera.main.ScreenToWorldPoint(mouse.position.ReadValue()) - transform.position;
@@ -37,8 +39,7 @@ public class PlayerScript : MonoBehaviour
 
         // Move gun slightly forward in aiming direction
         Vector2 offsetDirection = gunPointDirection.normalized;
-        float offsetDistance = 0.5f; // tweak this value
 
-        gun.transform.position = (Vector2)transform.position + offsetDirection * offsetDistance;
+        gun.transform.position = (Vector2)transform.position + offsetDirection * gunOffset;
     }
 }
