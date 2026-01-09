@@ -4,9 +4,12 @@ using UnityEngine.InputSystem;
 public class PlayerScript : MonoBehaviour
 {
     public GameObject gun;
+    public GameObject bullet;
     private Rigidbody2D m_rigidbody;
     public float moveSpeed = 20f;
     public float gunOffset = 1f;
+    private float gunCooldown = 0.2f;
+    private float lastShotTime = 0f;
 
     // These variables are to hold the Action references
     InputAction moveAction;
@@ -23,6 +26,9 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Camera follows
+        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
+
         // Read the "Move" action value, which is a 2D vector
 
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
@@ -41,5 +47,11 @@ public class PlayerScript : MonoBehaviour
         Vector2 offsetDirection = gunPointDirection.normalized;
 
         gun.transform.position = (Vector2)transform.position + offsetDirection * gunOffset;
+
+        if (mouse.leftButton.isPressed & Time.time > lastShotTime + gunCooldown)
+        {
+            Instantiate(bullet, gun.transform.position, gun.transform.rotation);
+            lastShotTime = Time.time;
+        }
     }
 }
