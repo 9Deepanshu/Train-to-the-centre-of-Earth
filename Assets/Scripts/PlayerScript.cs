@@ -11,6 +11,9 @@ public class PlayerScript : MonoBehaviour
     private float gunCooldown = 0.2f;
     private float lastShotTime = 0f;
 
+    private Vector3 bulletSpawnPoint;
+    public float bulletOffsetFromGun = 1f;
+
     // These variables are to hold the Action references
     InputAction moveAction;
 
@@ -47,10 +50,11 @@ public class PlayerScript : MonoBehaviour
         Vector2 offsetDirection = gunPointDirection.normalized;
 
         gun.transform.position = (Vector2)transform.position + offsetDirection * gunOffset;
+        bulletSpawnPoint = (Vector2)transform.position + offsetDirection * (gunOffset + bulletOffsetFromGun);
 
         if (mouse.leftButton.isPressed & Time.time > lastShotTime + gunCooldown)
         {
-            Instantiate(bullet, gun.transform.position, gun.transform.rotation);
+            Instantiate(bullet, bulletSpawnPoint, gun.transform.rotation);
             lastShotTime = Time.time;
         }
     }

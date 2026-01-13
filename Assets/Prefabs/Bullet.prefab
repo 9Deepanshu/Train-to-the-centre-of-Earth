@@ -141,7 +141,7 @@ TrailRenderer:
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95740bf1676ab5742a199e1ce0be17d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  bulletSpeed: 25
+  bulletSpeed: 40
   bulletLifetime: 5
 --- !u!50 &-2479023103588849629
 Rigidbody2D:

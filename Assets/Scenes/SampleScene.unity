@@ -801,9 +801,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   gun: {fileID: 1181759234}
-  bullet: {fileID: 7003170384366640333, guid: 089442798ea2cad40b7f1a759998a2b0, type: 3}
+  bullet: {fileID: 400729086766669409, guid: cf01e2fbf71575348975238c42d35866, type: 3}
   moveSpeed: 30
   gunOffset: 0.7
+  bulletOffsetFromGun: 0.5
 --- !u!50 &1813431636
 Rigidbody2D:
   serializedVersion: 5
