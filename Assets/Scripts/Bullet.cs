@@ -31,7 +31,23 @@ public class Bullet : MonoBehaviour
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
         Debug.Log(hitInfo.gameObject.name);
-        Destroy(gameObject);
+
+        /*
+        if (hitInfo.gameObject.CompareTag("Enemy"))
+        {
+            Enemy enemy = hitInfo.gameObject.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(1);
+            }
+        }
+        */
+
+        if(hitInfo.gameObject.name.Contains("Wall"))
+        {
+            Destroy(gameObject);
+        }
+        
     }
 
 

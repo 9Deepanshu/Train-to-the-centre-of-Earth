@@ -10,6 +10,7 @@ public class PlayerScript : MonoBehaviour
     public float gunOffset = 1f;
     private float gunCooldown = 0.2f;
     private float lastShotTime = 0f;
+    private Vector2 moveValue;
 
     private Vector3 bulletSpawnPoint;
     public float bulletOffsetFromGun = 1f;
@@ -34,8 +35,7 @@ public class PlayerScript : MonoBehaviour
 
         // Read the "Move" action value, which is a 2D vector
 
-        Vector2 moveValue = moveAction.ReadValue<Vector2>();
-        m_rigidbody.MovePosition(m_rigidbody.position + moveValue * Time.deltaTime * moveSpeed);
+        moveValue = moveAction.ReadValue<Vector2>();
 
         var mouse = Mouse.current;
         Vector2 gunPointDirection = Camera.main.ScreenToWorldPoint(mouse.position.ReadValue()) - transform.position;
@@ -57,5 +57,10 @@ public class PlayerScript : MonoBehaviour
             Instantiate(bullet, bulletSpawnPoint, gun.transform.rotation);
             lastShotTime = Time.time;
         }
+    }
+
+    private void FixedUpdate()
+    {
+        m_rigidbody.MovePosition(m_rigidbody.position + moveValue * Time.deltaTime * moveSpeed);
     }
 }

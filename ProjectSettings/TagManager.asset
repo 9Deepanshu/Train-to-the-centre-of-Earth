@@ -42,8 +42,14 @@ TagManager:
   - name: Background
     uniqueID: 3911362083
     locked: 0
+  - name: Train
+    uniqueID: 1496032283
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: light
+    uniqueID: 3155130393
     locked: 0
   m_RenderingLayers:
   - Default
