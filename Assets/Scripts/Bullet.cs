@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public int bulletDamage = 10;
     public float bulletSpeed = 25f;
     public float bulletLifetime = 5f;
     private float startTime;
@@ -30,7 +31,7 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        Debug.Log(hitInfo.gameObject.name);
+        //Debug.Log(hitInfo.gameObject.name);
 
         /*
         if (hitInfo.gameObject.CompareTag("Enemy"))
@@ -43,12 +44,15 @@ public class Bullet : MonoBehaviour
         }
         */
 
-        if(hitInfo.gameObject.name.Contains("Wall"))
+        if (hitInfo.gameObject.name.Contains("Wall"))
         {
             Destroy(gameObject);
         }
-        
+
+        if (hitInfo.gameObject.CompareTag("Enemy"))
+        {
+            hitInfo.gameObject.GetComponent<Enemy>().enemyHealth -= bulletDamage;
+            Destroy(gameObject);
+        }
     }
-
-
 }

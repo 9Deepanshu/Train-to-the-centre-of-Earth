@@ -2,10 +2,16 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Enemy Stats")]
+    public int enemyHealth = 50;
+    public int enemyDamage = 10;
+    public float damageInterval = 1.0f;
+    private float nextDamageTime = 0.0f;
+
     private bool playerInRange = false;
     private Vector2 directionToPlayer;
 
-
+    [Header("Movement Settings")]
     [SerializeField] private float speed = 3.0f;
     [SerializeField] private float rotationSpeed = 3.0f;
     [SerializeField] private float playerAwarenessRadius = 45.0f;
@@ -29,13 +35,18 @@ public class Enemy : MonoBehaviour
         Vector2 enemyToPlayerVector = playerTransform.position - transform.position;
         directionToPlayer = enemyToPlayerVector.normalized;
 
-        if (enemyToPlayerVector.magnitude <= playerAwarenessRadius && Vector2.Angle(transform.up,enemyToPlayerVector) <= playerAwarenessRadius)
+        if (enemyToPlayerVector.magnitude <= playerAwarenessDistance && Vector2.Angle(transform.up,enemyToPlayerVector) <= playerAwarenessRadius)
         {
             playerInRange = true;
         }
         else
         {
             playerInRange = false;
+        }
+
+        if (enemyHealth <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -83,6 +94,15 @@ public class Enemy : MonoBehaviour
         else
         {
             rigidBody.linearVelocity = transform.up * speed;
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if(collision.gameObject.name.Contains("Player") && Time.time >= nextDamageTime)
+        {
+            collision.gameObject.GetComponent<PlayerScript>().playerHealth -= enemyDamage;
+            nextDamageTime = Time.time + damageInterval;
         }
     }
 }

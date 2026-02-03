@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerScript : MonoBehaviour
 {
+    public int playerHealth = 100;
     public GameObject gun;
     public GameObject bullet;
     private Rigidbody2D m_rigidbody;
