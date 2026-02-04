@@ -16,6 +16,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float rotationSpeed = 3.0f;
     [SerializeField] private float playerAwarenessRadius = 45.0f;
     [SerializeField] private float playerAwarenessDistance = 10.0f;
+    [SerializeField] private float secondsToWalkThroughDoor = 3.0f;
+    private float startTime;
 
     private Transform playerTransform;
 
@@ -27,6 +29,13 @@ public class Enemy : MonoBehaviour
         playerTransform = FindAnyObjectByType<PlayerScript>().transform;
 
         rigidBody = GetComponent<Rigidbody2D>();
+    }
+
+    private void Start()
+    {
+        Collider2D collider = GetComponent<Collider2D>();
+        collider.isTrigger = true;
+        startTime = Time.time;
     }
 
     // Update is called once per frame
@@ -47,6 +56,12 @@ public class Enemy : MonoBehaviour
         if (enemyHealth <= 0)
         {
             Destroy(gameObject);
+        }
+
+        if (Time.time >= startTime + secondsToWalkThroughDoor)
+        {
+            Collider2D collider = GetComponent<Collider2D>();
+            collider.isTrigger = false;
         }
     }
 
