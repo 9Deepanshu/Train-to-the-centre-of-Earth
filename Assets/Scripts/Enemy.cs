@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -44,6 +45,11 @@ public class Enemy : MonoBehaviour
         startTime = Time.time;
 
         wanderPoints = FindAnyObjectByType<SpawnManager>().WanderPoints;
+
+        targetDirection = DirectionToNextWanderPoint();
+
+        //Debug.Log("Enemy Starting Position: " + transform.position);
+        //Debug.Log("Initial Target Point: " + targetPoint);
     }
 
     // Update is called once per frame
@@ -89,7 +95,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            if (Vector2.Distance(transform.position, targetPoint) < 1.0f)
+            if (Vector2.Distance(transform.position, targetPoint) <= 1.0f)
             {
                 targetDirection = DirectionToNextWanderPoint();
                 
@@ -104,46 +110,24 @@ public class Enemy : MonoBehaviour
 
     private Vector2 DirectionToNextWanderPoint()
     {
-        Vector2 nearestWanderPoint;
-        Vector2 secondNearestWanderPoint;
-        if (Vector2.Distance(transform.position, wanderPoints[0].transform.position) < Vector2.Distance(transform.position, wanderPoints[1].transform.position))
+        wanderPoints.Sort((a, b) =>
         {
-            nearestWanderPoint = wanderPoints[0].transform.position;
-            secondNearestWanderPoint = wanderPoints[1].transform.position;
-        }
-        else
-        {
-            nearestWanderPoint = wanderPoints[1].transform.position;
-            secondNearestWanderPoint = wanderPoints[0].transform.position;
-        }
+            float distA = (a.transform.position - transform.position).sqrMagnitude;
+            float distB = (b.transform.position - transform.position).sqrMagnitude;
+            return distA.CompareTo(distB);
+        });
 
-        for (int i = 2; i < wanderPoints.Count; i++)
+        for (int i = 0; i < wanderPoints.Count; i++)
         {
-
-            if (Vector2.Distance(transform.position, wanderPoints[i].transform.position) < Vector2.Distance(transform.position, nearestWanderPoint))
+            if (Vector2.Distance(transform.position, wanderPoints[i].transform.position) > 1 && Vector2.Angle(transform.up, (wanderPoints[i].transform.position - transform.position)) <= playerAwarenessRadius)
             {
-                nearestWanderPoint = wanderPoints[i].transform.position;
-            }
-            else if (Vector2.Distance(transform.position, wanderPoints[i].transform.position) < Vector2.Distance(transform.position, secondNearestWanderPoint))
-            {
-                secondNearestWanderPoint = wanderPoints[i].transform.position;
+                targetPoint = wanderPoints[i].transform.position;
+                return (wanderPoints[i].transform.position - transform.position).normalized;
             }
         }
-
-        if (Vector2.Angle(transform.up, (nearestWanderPoint - (Vector2)transform.position)) <= playerAwarenessRadius)
-        {
-            targetPoint = nearestWanderPoint;
-            return (nearestWanderPoint - (Vector2)transform.position).normalized;
-        }
-        else if (Vector2.Angle(transform.up, (secondNearestWanderPoint - (Vector2)transform.position)) <= playerAwarenessRadius)
-        {
-            targetPoint = secondNearestWanderPoint;
-            return (secondNearestWanderPoint - (Vector2)transform.position).normalized;
-        }
-        else
-        {
-            return (nearestWanderPoint - (Vector2)transform.position).normalized;
-        }
+        //return second nearest if none in angle because enemy will be at the nearest point
+        targetPoint = wanderPoints[1].transform.position;
+        return (wanderPoints[1].transform.position - transform.position).normalized;
     }
 
     private void RotateTowardsTarget()
