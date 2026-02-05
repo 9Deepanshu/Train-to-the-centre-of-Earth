@@ -6,6 +6,10 @@ TagManager:
   tags:
   - wall
   - Enemy
+  - WanderPoint
+  - HidePoint
+  - SpawnPointDoor
+  - SpawnPointWindow
   layers:
   - Default
   - TransparentFX
